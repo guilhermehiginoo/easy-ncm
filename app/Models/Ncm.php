@@ -9,11 +9,13 @@ class Ncm extends Model
     protected $table = 'ncm_codes';
 
     protected $fillable = [
-        'code',
+        'ncm_code',
         'description',
         'NT',
         'aliquot',
         'parent_id',
+        'embedding_status',
+        'embedding_error',
     ];
 
     public function parent()
