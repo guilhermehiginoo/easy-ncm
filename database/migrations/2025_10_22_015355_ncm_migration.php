@@ -14,6 +14,7 @@ return new class () extends Migration {
             $table->enum('embedding_status', ['pending', 'processing', 'done', 'error'])->default('pending');
             $table->text('embedding_error')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
