@@ -11,34 +11,48 @@ class NcmCodesSeeder extends Seeder
     {
         $stack = [];
 
-        if (($handle = fopen(storage_path('app/public/ncm_csv/ncm-planilha.csv'), 'r')) !== false) {
+        $filePath = storage_path('app/public/ncm_csv/ncm-planilha.csv');
+
+        if (!file_exists($filePath)) {
+            $this->command->error("Arquivo CSV não encontrado em: $filePath");
+
+            return;
+        }
+
+        if (($handle = fopen($filePath, 'r')) !== false) {
             fgetcsv($handle);
 
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 [$ncm_code, $ex, $description, $aliquot] = $data;
+                $description                             = trim($description);
 
-                $description = trim($description);
+                if (!$description) {
+                    continue;
+                }
 
-                // Detecta nível
+                $level     = 2;
+                $parent_id = null;
+
                 if (str_ends_with($description, '.')) {
-                    $nivel = 1;
+                    $level     = 1;
+                    $parent_id = null;
+                } elseif (str_starts_with($description, '--')) {
+                    $level     = 3;
+                    $parent_id = $stack[2]->id ?? $stack[1]->id ?? null;
                 } elseif (str_starts_with($description, '-') && str_ends_with($description, ':')) {
-                    $nivel = 2;
-                } elseif (str_starts_with($description, '--') || str_starts_with($description, '-')) {
-                    $nivel = 3;
-                } else {
-                    $nivel = 3;
+                    $level     = 2;
+                    $parent_id = $stack[1]->id ?? null;
+                } elseif (!str_starts_with($description, '-') && !str_ends_with($description, '.')) {
+                    $level     = 2;
+                    $parent_id = $stack[1]->id ?? null;
+                } elseif (str_starts_with($description, '-') && !str_ends_with($description, ':')) {
+                    $level     = 2;
+                    $parent_id = $stack[1]->id ?? null;
                 }
 
                 $descricaoLimpa = trim(str_replace(['--', '-', ':', '.'], '', $description));
 
-                while (count($stack) >= $nivel) {
-                    array_pop($stack);
-                }
-
-                $parent_id = end($stack)['id'] ?? null;
-
-                if ($nivel <= 2) {
+                if ($level <= 2) {
                     $nt          = null;
                     $aliquot_val = null;
                 } else {
@@ -50,8 +64,8 @@ class NcmCodesSeeder extends Seeder
                     continue;
                 }
 
-                $registro = Ncm::create([
-                    'ncm_code'    => $ncm_code ?: null,
+                $register = Ncm::create([
+                    'ncm_code'    => $ncm_code,
                     'ex'          => $ex ?: null,
                     'description' => $descricaoLimpa,
                     'parent_id'   => $parent_id,
@@ -59,7 +73,7 @@ class NcmCodesSeeder extends Seeder
                     'aliquot'     => $aliquot_val,
                 ]);
 
-                $stack[$nivel] = $registro;
+                $stack[$level] = $register;
             }
 
             fclose($handle);
