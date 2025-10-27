@@ -11,7 +11,7 @@ class ApiTokenMiddleware
     {
         $token = $request->bearerToken(); // Pega o token do header
 
-        $validToken = config('api.secret_token');
+        $validToken = config('api.token');
 
         if ($token !== $validToken) {
             return response()->json(['message' => 'Unauthorized'], 401);

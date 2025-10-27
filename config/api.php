@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'secret_token' => env('SECRET_TOKEN'),
+    'token' => env('SECRET_TOKEN'),
 ];
