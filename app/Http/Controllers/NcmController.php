@@ -13,7 +13,6 @@ class NcmController extends Controller
         return view('ncm.index', compact('ncms'));
     }
 
-
     public function show(string $id)
     {
         //

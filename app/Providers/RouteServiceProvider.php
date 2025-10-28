@@ -12,7 +12,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-
         Route::aliasMiddleware('api.token', ApiTokenMiddleware::class);
     }
 

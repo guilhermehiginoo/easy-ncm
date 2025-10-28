@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ncm;
-use App\Services\OpenAiService;
-use App\Services\QdrantService;
+use App\Services\{OpenAiService, QdrantService};
 use Throwable;
 
 class VectorController extends Controller
@@ -18,7 +17,6 @@ class VectorController extends Controller
         $ncms = Ncm::whereNull('embedding_status')
             ->orWhereIn('embedding_status', ['error', 'pending'])
             ->lazyById(1000);
-
 
         foreach ($ncms as $ncm) {
             try {
