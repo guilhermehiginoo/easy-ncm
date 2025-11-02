@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
+    /**
+     * Get the classifications for the user.
+     */
+    public function classifications()
+    {
+        return $this->hasMany(Classification::class);
+    }
 }

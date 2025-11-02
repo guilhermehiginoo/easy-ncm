@@ -1,13 +1,9 @@
-import DangerButton from '@/Components/DangerButton';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import Modal from '@/Components/Modal';
-import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
-import { useRef, useState } from 'react';
+import Modal from "@/Components/Modal";
+import Button from "@/Components/Button";
+import { useForm } from "@inertiajs/react";
+import { useRef, useState } from "react";
 
-export default function DeleteUserForm({ className = '' }) {
+export default function DeleteUserForm({ className = "" }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
     const passwordInput = useRef();
 
@@ -20,7 +16,7 @@ export default function DeleteUserForm({ className = '' }) {
         errors,
         clearErrors,
     } = useForm({
-        password: '',
+        password: "",
     });
 
     const confirmUserDeletion = () => {
@@ -30,7 +26,7 @@ export default function DeleteUserForm({ className = '' }) {
     const deleteUser = (e) => {
         e.preventDefault();
 
-        destroy(route('profile.destroy'), {
+        destroy(route("profile.destroy"), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
             onError: () => passwordInput.current.focus(),
@@ -40,78 +36,80 @@ export default function DeleteUserForm({ className = '' }) {
 
     const closeModal = () => {
         setConfirmingUserDeletion(false);
-
         clearErrors();
         reset();
     };
 
     return (
         <section className={`space-y-6 ${className}`}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Delete Account
-                </h2>
+            <p className="text-[#92adc9] text-sm">
+                Uma vez que sua conta for excluída, todos os seus recursos e
+                dados serão permanentemente deletados. Antes de excluir sua
+                conta, faça o download de qualquer dado ou informação que você
+                deseja manter.
+            </p>
 
-                <p className="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
-                </p>
-            </header>
-
-            <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
-            </DangerButton>
+            <button
+                onClick={confirmUserDeletion}
+                className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] transition-colors bg-red-600 text-white hover:bg-red-700"
+            >
+                Excluir Conta
+            </button>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
-                <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
+                <form onSubmit={deleteUser} className="p-6 bg-[#233648]">
+                    <h2 className="text-lg font-medium text-white">
+                        Tem certeza que deseja excluir sua conta?
                     </h2>
 
-                    <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                    <p className="mt-1 text-sm text-[#92adc9]">
+                        Uma vez que sua conta for excluída, todos os seus
+                        recursos e dados serão permanentemente deletados. Por
+                        favor, insira sua senha para confirmar que você deseja
+                        excluir permanentemente sua conta.
                     </p>
 
                     <div className="mt-6">
-                        <InputLabel
-                            htmlFor="password"
-                            value="Password"
-                            className="sr-only"
-                        />
+                        <label htmlFor="password" className="sr-only">
+                            Senha
+                        </label>
 
-                        <TextInput
+                        <input
                             id="password"
                             type="password"
                             name="password"
                             ref={passwordInput}
                             value={data.password}
                             onChange={(e) =>
-                                setData('password', e.target.value)
+                                setData("password", e.target.value)
                             }
-                            className="mt-1 block w-3/4"
-                            isFocused
-                            placeholder="Password"
+                            placeholder="Senha"
+                            className="w-3/4 px-4 py-3 rounded-lg bg-[#111a22] border-none text-white placeholder:text-[#92adc9] focus:outline-none focus:ring-2 focus:ring-[#1172d4]"
                         />
 
-                        <InputError
-                            message={errors.password}
-                            className="mt-2"
-                        />
+                        {errors.password && (
+                            <p className="mt-2 text-sm text-red-400">
+                                {errors.password}
+                            </p>
+                        )}
                     </div>
 
-                    <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>
-                            Cancel
-                        </SecondaryButton>
+                    <div className="mt-6 flex justify-end gap-3">
+                        <Button
+                            variant="secondary"
+                            onClick={closeModal}
+                            type="button"
+                        >
+                            Cancelar
+                        </Button>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
-                        </DangerButton>
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] transition-colors bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {processing ? "Excluindo..." : "Excluir Conta"}
+                        </button>
                     </div>
                 </form>
             </Modal>
