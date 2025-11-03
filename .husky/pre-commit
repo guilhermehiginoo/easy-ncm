@@ -1,0 +1,30 @@
+# Rodar os testes
+echo "🧪 Agora é hora de rodar os testes. Vamos ver se tudo está funcionando direitinho..."
+php artisan test
+if [ $? -ne 0 ]; then
+    echo "😕 Algo deu errado nos testes. Arruma aí e tenta de novo!"
+    exit 1
+fi
+
+# Formatar os arquivos alterados usando o Laravel Pint
+echo "✨ Formatando os arquivos com o Laravel Pint... Deixar tudo alinhado e bonito!"
+
+# Captura todos os arquivos PHP modificados para o commit
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".php\{0,1\}$") || true
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "👍 Nenhum arquivo PHP foi alterado. Tudo certo por aqui!"
+else
+    for FILE in $STAGED_FILES
+    do
+        echo "📝 Rodando o Pint no arquivo: ${FILE}... Deixando ele impecável!"
+        ./vendor/bin/pint "${FILE}" > /dev/null 2>&1  # Executa o Pint para o arquivo
+        git add "${FILE}";  # Adiciona o arquivo formatado ao commit
+        echo "👌 O arquivo ${FILE} está pronto e bem formatado!"
+    done
+fi
+
+echo "🎉 Tudo pronto! Agora seu código está impecável. Pode fazer o push tranquilo!"
+
+# Finaliza o script com sucesso
+exit 0
