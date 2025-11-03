@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\{NcmController, ProfileController};
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +23,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    // region NCM Routes
+    Route::get('/ncm', [NcmController::class, 'index'])->name('ncm.index');
+    // endregion
+
+    // region Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -34,6 +40,7 @@ Route::middleware('auth')->group(function () {
     // Rotas de histórico
     Route::get('/historico', [App\Http\Controllers\HistoryController::class, 'index'])->name('history.index');
     Route::get('/historico/{id}', [App\Http\Controllers\HistoryController::class, 'show'])->name('history.show');
+    // endregion
 });
 
 require __DIR__ . '/auth.php';
