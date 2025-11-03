@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classification;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class HistoryController extends Controller
@@ -18,11 +17,11 @@ class HistoryController extends Controller
             ->get()
             ->map(function ($classification) {
                 return [
-                    'id' => $classification->id,
-                    'product' => $classification->product_description,
-                    'ncm' => $classification->ncm_code,
+                    'id'         => $classification->id,
+                    'product'    => $classification->product_description,
+                    'ncm'        => $classification->ncm_code,
                     'created_at' => $classification->created_at,
-                    'date' => $classification->created_at->format('Y-m-d'),
+                    'date'       => $classification->created_at->format('Y-m-d'),
                 ];
             });
 
@@ -41,12 +40,12 @@ class HistoryController extends Controller
 
         return Inertia::render('HistoryDetail', [
             'classification' => [
-                'id' => $classification->id,
-                'product' => $classification->product_description,
-                'ncm' => $classification->ncm_code,
-                'tipi' => $classification->tipi_code,
+                'id'            => $classification->id,
+                'product'       => $classification->product_description,
+                'ncm'           => $classification->ncm_code,
+                'tipi'          => $classification->tipi_code,
                 'justification' => $classification->justification,
-                'created_at' => $classification->created_at,
+                'created_at'    => $classification->created_at,
             ],
         ]);
     }

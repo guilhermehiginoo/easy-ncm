@@ -19,12 +19,12 @@ class ClassifyController extends Controller
             ->get()
             ->map(function ($classification) {
                 return [
-                    'id' => $classification->id,
-                    'title' => $classification->product_description,
-                    'product' => $classification->product_description,
-                    'ncm' => $classification->ncm_code,
+                    'id'         => $classification->id,
+                    'title'      => $classification->product_description,
+                    'product'    => $classification->product_description,
+                    'ncm'        => $classification->ncm_code,
                     'created_at' => $classification->created_at,
-                    'date' => $classification->created_at->format('Y-m-d H:i'),
+                    'date'       => $classification->created_at->format('Y-m-d H:i'),
                 ];
             });
 
@@ -48,17 +48,17 @@ class ClassifyController extends Controller
 
         // Salvar no banco de dados
         $classification = Classification::create([
-            'user_id' => auth()->id(),
+            'user_id'             => auth()->id(),
             'product_description' => $request->description,
-            'ncm_code' => $ncmCode['ncm'],
-            'tipi_code' => $ncmCode['tipi'],
-            'justification' => $ncmCode['justification'],
+            'ncm_code'            => $ncmCode['ncm'],
+            'tipi_code'           => $ncmCode['tipi'],
+            'justification'       => $ncmCode['justification'],
         ]);
 
         return back()->with([
             'classification' => [
-                'ncm' => $ncmCode['ncm'],
-                'tipi' => $ncmCode['tipi'],
+                'ncm'           => $ncmCode['ncm'],
+                'tipi'          => $ncmCode['tipi'],
                 'justification' => $ncmCode['justification'],
             ],
         ]);
@@ -72,8 +72,8 @@ class ClassifyController extends Controller
         // TODO: Integrar com API de IA para classificação real
         // Por enquanto, retorna um exemplo
         return [
-            'ncm' => '8517.12.31',
-            'tipi' => '8517.12',
+            'ncm'           => '8517.12.31',
+            'tipi'          => '8517.12',
             'justification' => 'Classificação baseada na descrição do produto: ' . substr($description, 0, 100),
         ];
     }
