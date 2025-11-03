@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fonte personalizada */
+@layer base {
+    body {
+        font-family: "Inter", "Noto Sans", sans-serif;
+    }
+}
+
+/* Estilos customizados para scrollbar (opcional, mas melhora a aparência no dark mode) */
+@layer utilities {
+    /* Webkit scrollbar styling */
+    .scrollbar-custom::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-track {
+        background: #233648;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+        background: #324d67;
+        border-radius: 4px;
+    }
+
+    .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+        background: #92adc9;
+    }
+}
+
+/* Remove autofill background amarelo dos inputs */
+@layer base {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px #233648 inset !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+}
