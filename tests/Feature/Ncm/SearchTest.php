@@ -16,7 +16,7 @@ class SearchTest extends TestCase
 
         $response = $this->getJson('/ncm/search?query=eletrônicos');
 
-        $response->dump(); // 👈 mostra exatamente o JSON retornado
+        $response->dump();
 
         $response->assertStatus(200);
     }
