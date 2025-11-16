@@ -48,7 +48,7 @@ class VectorizeNcm extends Command
                     continue;
                 }
 
-                $point = QdrantService::makePoint($ncm->id, $vector, [
+                $point = $this->qdrantService->makePoint($ncm->id, $vector, [
                     'ncm_code'    => $ncm->ncm_code,
                     'description' => $ncm->description,
                     'ex'          => $ncm->ex,
