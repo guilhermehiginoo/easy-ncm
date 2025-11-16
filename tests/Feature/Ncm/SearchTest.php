@@ -44,8 +44,6 @@ class SearchTest extends TestCase
 
         $response = $this->getJson('/ncm/search?query=Equinos');
 
-        $response->dump();
-
         $response->assertStatus(200);
     }
 
