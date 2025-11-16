@@ -17,6 +17,27 @@ class QdrantService
         $this->apiKey  = config('qdrant.api_key');
     }
 
+    public function searchPoints(array $vector, string $collection, int $limit = 5, ?array $filter = null): array
+    {
+        try {
+            $response = Http::withHeaders(array_filter([
+                'X-API-Key'    => $this->apiKey,
+                'Content-Type' => 'application/json',
+            ]))
+                ->timeout(10)
+                ->post("{$this->baseUrl}/collections/{$collection}/points/query", [
+                    'query'        => $vector,
+                    'limit'        => $limit,
+                    'filter'       => $filter,
+                    'with_payload' => true,
+                ]);
+
+            return $response->json() ?? [];
+        } catch (Throwable $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
     public function upsertPoints(string $collection, array $points): array
     {
         try {

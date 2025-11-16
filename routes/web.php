@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
     // region NCM Routes
     Route::get('/ncm', [NcmController::class, 'index'])->name('ncm.index');
+    Route::get('/ncm/search', [NcmController::class, 'vectorSearch'])->name('ncm.vectorSearch');
     // endregion
 
     // region Profile Routes
