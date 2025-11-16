@@ -14,7 +14,7 @@ class SearchTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $response = $this->getJson('/ncm/search?query=eletrônicos');
+        $response = $this->getJson('/ncm/search?query=Equinos');
 
         $response->dump();
 
