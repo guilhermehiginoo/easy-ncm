@@ -13,7 +13,7 @@ class QdrantService
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(config('qdrant.host', 'http://localhost:6333'), '/');
+        $this->baseUrl = config('qdrant.host', 'http://localhost:6333');
         $this->apiKey  = config('qdrant.api_key');
     }
 
