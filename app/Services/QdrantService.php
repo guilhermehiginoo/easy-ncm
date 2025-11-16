@@ -14,7 +14,7 @@ class QdrantService
     public function __construct()
     {
         $this->baseUrl = rtrim(config('qdrant.host', 'http://localhost:6333'), '/');
-        $this->apiKey  = config('qdrant.api_key', null);
+        $this->apiKey  = config('qdrant.api_key');
     }
 
     public function upsertPoints(string $collection, array $points): array
@@ -25,7 +25,7 @@ class QdrantService
                 'Content-Type' => 'application/json',
             ]))
                 ->timeout(10)
-                ->post("{$this->baseUrl}/collections/{$collection}/points", [
+                ->put("{$this->baseUrl}/collections/{$collection}/points", [
                     'points' => $points,
                 ]);
 
