@@ -1,18 +1,14 @@
 import { Link, usePage } from "@inertiajs/react";
+import { useState } from "react";
+import Dropdown from "@/Components/Dropdown";
 
 const Header = () => {
     const { url, props } = usePage();
     const { auth } = props;
+    const [avatarError, setAvatarError] = useState(false);
 
     // Função para verificar se o link está ativo
     const isActive = (path) => url === path || url.startsWith(path);
-
-    // Avatar do usuário (pode vir do backend ou usar dicebear)
-    const userAvatar =
-        auth?.user?.avatar ||
-        `https://api.dicebear.com/7.x/avataaars/svg?seed=${
-            auth?.user?.email || "user"
-        }`;
 
     return (
         <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#233648] px-10 py-3">
@@ -85,15 +81,60 @@ const Header = () => {
                     </Link>
                 </nav>
 
-                {/* Avatar do Usuário */}
-                <Link
-                    href="/profile"
-                    className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer hover:opacity-80 transition-opacity"
-                    style={{
-                        backgroundImage: `url("${userAvatar}")`,
-                    }}
-                    title={auth?.user?.name || "Perfil do usuário"}
-                />
+                {/* Avatar do Usuário com Dropdown */}
+                <Dropdown>
+                    <Dropdown.Trigger>
+                        <button
+                            type="button"
+                            className="relative rounded-full size-10 cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#1172d4] focus:ring-offset-2 focus:ring-offset-[#111a22] bg-gray-600 flex items-center justify-center overflow-hidden"
+                            title={auth?.user?.name || "Perfil do usuário"}
+                        >
+                            {auth?.user?.avatar && !avatarError ? (
+                                <img
+                                    src={auth.user.avatar}
+                                    alt={auth?.user?.name || "Avatar"}
+                                    className="w-full h-full object-cover"
+                                    onError={() => setAvatarError(true)}
+                                />
+                            ) : (
+                                <span className="text-white text-xs font-medium">
+                                    {auth?.user?.name
+                                        ?.charAt(0)
+                                        .toUpperCase() || "U"}
+                                </span>
+                            )}
+                        </button>
+                    </Dropdown.Trigger>
+
+                    <Dropdown.Content
+                        align="right"
+                        width="48"
+                        contentClasses="py-1 bg-[#1a2530] border border-[#233648]"
+                    >
+                        <div className="px-4 py-2 border-b border-[#233648]">
+                            <div className="text-sm font-medium text-white leading-tight">
+                                {auth?.user?.name}
+                            </div>
+                            <div className="text-xs text-[#92adc9] truncate mt-1">
+                                {auth?.user?.email}
+                            </div>
+                        </div>
+                        <Dropdown.Link
+                            href={route("profile.edit")}
+                            className="text-[#ffffff] hover:bg-[#233648]"
+                        >
+                            Perfil
+                        </Dropdown.Link>
+                        <Dropdown.Link
+                            href={route("logout")}
+                            method="post"
+                            as="button"
+                            className="text-red-400 hover:bg-[#233648] hover:text-red-300 w-full text-left"
+                        >
+                            Sair
+                        </Dropdown.Link>
+                    </Dropdown.Content>
+                </Dropdown>
             </div>
         </header>
     );
