@@ -3,6 +3,7 @@
 namespace Feature\Ncm;
 
 use App\Models\User;
+use App\Services\OpenAiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,6 +14,12 @@ class SearchTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user);
+
+        $this->mock(OpenAiService::class, function ($mock) {
+            $mock->shouldReceive('createVector')
+                ->once()
+                ->andReturn(array_fill(0, 1536, 0.1));
+        });
 
         $response = $this->getJson('/ncm/search?query=Equinos');
 
