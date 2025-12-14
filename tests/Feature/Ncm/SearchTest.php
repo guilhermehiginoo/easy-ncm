@@ -19,6 +19,15 @@ class SearchTest extends TestCase
             $mock->shouldReceive('createVector')
                 ->once()
                 ->andReturn(array_fill(0, 1536, 0.1));
+            $mock->shouldReceive('chooseNcm')
+                ->once()
+                ->andReturn([
+                    [
+                        'ncm_id'      => 123,
+                        'ncm_code'    => '0101.21.00',
+                        'description' => 'Equinos vivos',
+                    ],
+                ]);
         });
 
         $this->mock(QdrantService::class, function ($mock) {
